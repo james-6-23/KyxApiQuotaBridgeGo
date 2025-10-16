@@ -1,0 +1,343 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text;
+    font-feature-settings: 'cv11', 'ss01';
+    font-variation-settings: 'opsz' 32;
+  }
+
+  /* 自定义滚动条 */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-light-bg-secondary dark:bg-dark-bg-secondary;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-light-border dark:bg-dark-border rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-light-border-hover dark:bg-dark-border-hover;
+  }
+}
+
+@layer components {
+  /* 主题卡片 */
+  .theme-card,
+  .grok-card {
+    @apply bg-light-bg-secondary dark:bg-dark-bg-secondary
+           border border-light-border dark:border-dark-border
+           rounded-2xl transition-all duration-200
+           shadow-sm dark:shadow-card;
+  }
+
+  .theme-card:hover,
+  .grok-card:hover {
+    @apply border-light-border-hover dark:border-dark-border-hover
+           shadow-md dark:shadow-card-hover;
+  }
+
+  /* 玻璃态效果 */
+  .glass-effect {
+    @apply bg-light-bg-tertiary/80 dark:bg-dark-bg-tertiary/80
+           backdrop-blur-md
+           border border-light-border dark:border-dark-border;
+  }
+
+  /* 渐变文字 */
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary via-purple to-primary
+           bg-clip-text text-transparent;
+  }
+
+  /* 科技感按钮 */
+  .tech-button {
+    @apply relative px-6 py-3 rounded-xl font-medium
+           bg-light-bg-tertiary dark:bg-dark-bg-tertiary
+           border border-light-border dark:border-dark-border
+           hover:border-primary hover:shadow-lg
+           transition-all duration-300
+           overflow-hidden;
+  }
+
+  .tech-button::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0
+           translate-x-[-100%] transition-transform duration-700;
+  }
+
+  .tech-button:hover::before {
+    @apply translate-x-[100%];
+  }
+
+  /* 发光边框效果 */
+  .glow-border {
+    @apply relative border border-transparent rounded-xl;
+  }
+
+  .glow-border::before {
+    content: '';
+    @apply absolute inset-0 rounded-xl p-[1px] bg-gradient-to-r from-primary via-purple to-primary;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  /* 数据展示卡片 */
+  .stat-card {
+    @apply theme-card p-6 flex flex-col gap-2;
+  }
+
+  .stat-value {
+    @apply text-4xl font-bold bg-gradient-to-r from-primary via-purple to-primary
+           bg-clip-text text-transparent;
+  }
+
+  .stat-label {
+    @apply text-sm text-light-text-tertiary dark:text-dark-text-tertiary
+           uppercase tracking-wider;
+  }
+
+  /* 输入框样式 */
+  .tech-input {
+    @apply w-full px-4 py-3
+           bg-light-bg-tertiary dark:bg-dark-bg-tertiary
+           border border-light-border dark:border-dark-border
+           rounded-xl
+           text-light-text dark:text-dark-text
+           placeholder-light-text-tertiary dark:placeholder-dark-text-tertiary
+           focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20
+           transition-all duration-200;
+  }
+
+  /* 标签样式 */
+  .tech-tag {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+           bg-light-bg-tertiary dark:bg-dark-bg-tertiary
+           border border-light-border dark:border-dark-border;
+  }
+
+  /* 分割线 */
+  .theme-divider,
+  .grok-divider {
+    @apply h-px bg-gradient-to-r from-transparent
+           via-light-border dark:via-dark-border
+           to-transparent my-6;
+  }
+}
+
+@layer utilities {
+  /* 动画延迟 */
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+
+  /* 文字渐变 */
+  .text-gradient-primary {
+    @apply bg-gradient-to-r from-primary to-purple bg-clip-text text-transparent;
+  }
+
+  /* 背景渐变 */
+  .bg-gradient-theme,
+  .bg-gradient-grok {
+    background: linear-gradient(135deg,
+      rgba(29, 155, 240, 0.05) 0%,
+      rgba(120, 86, 255, 0.05) 100%
+    );
+  }
+
+  .dark .bg-gradient-theme,
+  .dark .bg-gradient-grok {
+    background: linear-gradient(135deg,
+      rgba(29, 155, 240, 0.1) 0%,
+      rgba(120, 86, 255, 0.1) 100%
+    );
+  }
+
+  /* 网格背景 */
+  .grid-background {
+    background-image:
+      linear-gradient(rgba(222, 226, 230, 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(222, 226, 230, 0.5) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .dark .grid-background {
+    background-image:
+      linear-gradient(rgba(38, 38, 38, 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(38, 38, 38, 0.5) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+}
+
+/* Ant Design Vue 主题覆盖 */
+.ant-btn-primary {
+  @apply bg-primary hover:bg-primary-hover border-primary;
+}
+
+/* 输入框和选择器 */
+.ant-input,
+.ant-input-password,
+.ant-input-textarea textarea,
+.ant-select-selector {
+  @apply bg-light-bg-tertiary dark:bg-dark-bg-tertiary
+         border-light-border dark:border-dark-border
+         text-light-text dark:text-dark-text !important;
+}
+
+.ant-input::placeholder,
+.ant-input-textarea textarea::placeholder {
+  @apply text-light-text-tertiary dark:text-dark-text-tertiary !important;
+}
+
+.ant-input:hover,
+.ant-input-password:hover,
+.ant-select-selector:hover {
+  @apply border-light-border-hover dark:border-dark-border-hover !important;
+}
+
+.ant-input:focus,
+.ant-input-focused,
+.ant-input-password:focus,
+.ant-select-focused .ant-select-selector {
+  @apply border-primary ring-2 ring-primary/20 !important;
+}
+
+/* 表格 */
+.ant-table {
+  @apply bg-light-bg-secondary dark:bg-dark-bg-secondary !important;
+}
+
+.ant-table-thead > tr > th {
+  @apply bg-light-bg-tertiary dark:bg-dark-bg-tertiary
+         border-light-border dark:border-dark-border
+         text-light-text-secondary dark:text-dark-text-secondary !important;
+}
+
+.ant-table-tbody > tr > td {
+  @apply border-light-border dark:border-dark-border
+         text-light-text dark:text-dark-text !important;
+}
+
+.ant-table-tbody > tr:hover > td {
+  @apply bg-light-bg-hover dark:bg-dark-bg-hover !important;
+}
+
+/* 进度条 */
+.ant-progress-inner {
+  @apply bg-light-bg-tertiary dark:bg-dark-bg-tertiary !important;
+}
+
+/* 标签 */
+.ant-tag {
+  @apply border-light-border dark:border-dark-border !important;
+}
+
+/* 选项卡 */
+.ant-tabs-tab {
+  @apply text-light-text-secondary dark:text-dark-text-secondary !important;
+}
+
+.ant-tabs-tab-active .ant-tabs-tab-btn {
+  @apply text-primary !important;
+}
+
+.ant-tabs-ink-bar {
+  @apply bg-primary !important;
+}
+
+/* 表单 */
+.ant-form-item-label > label {
+  @apply text-light-text dark:text-dark-text !important;
+}
+
+/* 警告框 */
+.ant-alert {
+  @apply border-light-border dark:border-dark-border !important;
+}
+
+.ant-alert-success {
+  @apply bg-success-light dark:bg-success/10 !important;
+}
+
+.ant-alert-error {
+  @apply bg-error-light dark:bg-error/10 !important;
+}
+
+/* 模态框 */
+.ant-modal-content {
+  @apply bg-light-bg-secondary dark:bg-dark-bg-secondary
+         border border-light-border dark:border-dark-border !important;
+}
+
+.ant-modal-header {
+  @apply bg-light-bg-tertiary dark:bg-dark-bg-tertiary
+         border-light-border dark:border-dark-border !important;
+}
+
+.ant-modal-title {
+  @apply text-light-text dark:text-dark-text !important;
+}
+
+.ant-modal-body {
+  @apply text-light-text dark:text-dark-text !important;
+}
+
+.ant-modal-footer {
+  @apply border-light-border dark:border-dark-border !important;
+}
+
+/* 下拉菜单 */
+.ant-dropdown-menu {
+  @apply bg-light-bg-secondary dark:bg-dark-bg-secondary
+         border border-light-border dark:border-dark-border !important;
+}
+
+.ant-dropdown-menu-item {
+  @apply text-light-text dark:text-dark-text !important;
+}
+
+.ant-dropdown-menu-item:hover {
+  @apply bg-light-bg-hover dark:bg-dark-bg-hover !important;
+}
+
+/* 头像 */
+.ant-avatar {
+  @apply border-light-border dark:border-dark-border !important;
+}
+
+/* 按钮 */
+.ant-btn {
+  @apply border-light-border dark:border-dark-border
+         text-light-text dark:text-dark-text !important;
+}
+
+.ant-btn:not(.ant-btn-primary):hover {
+  @apply border-primary !important;
+}
+
+.ant-btn-link {
+  @apply text-primary !important;
+}

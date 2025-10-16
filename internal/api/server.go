@@ -32,9 +32,12 @@ func NewServer(cfg *config.Config, db *store.DB) *Server {
 
 // setupRoutes 设置路由
 func (s *Server) setupRoutes() {
-	// 页面路由
-	s.router.GET("/", s.handleUserPage)
-	s.router.GET("/admin", s.handleAdminPage)
+	// 静态文件服务
+	s.router.Static("/web", "./web")
+	s.router.StaticFile("/", "./web/index.html")
+	s.router.StaticFile("/admin.html", "./web/admin.html")
+	s.router.StaticFile("/app.js", "./web/app.js")
+	s.router.StaticFile("/admin.js", "./web/admin.js")
 
 	// OAuth 回调
 	s.router.GET("/oauth/callback", s.handleCallback)

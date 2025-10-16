@@ -1,0 +1,65 @@
+# Binaries
+*.exe
+*.dll
+*.so
+*.dylib
+kyx-api-quota-bridge
+kyx-api-quota-bridge.exe
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+coverage.txt
+coverage.html
+
+# Dependency directories
+vendor/
+frontend/node_modules/
+frontend/dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment files
+.env
+.env.local
+.env.*.local
+frontend/.env
+frontend/.env.local
+
+# Database
+*.db
+data.db
+data/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Build artifacts
+web/
+frontend/node_modules/
+frontend/.vite/
+
+# Go workspace file
+go.work
+
+# Documentation (keep main docs)
+API.md

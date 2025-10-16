@@ -157,7 +157,7 @@ func pushKeysToGroup(keys []string, apiURL, authorization string, groupID int) (
 		return false, "解析响应失败", keys
 	}
 
-	if !resp.StatusCode == http.StatusOK || !result.Success {
+	if resp.StatusCode != http.StatusOK || !result.Success {
 		return false, result.Message, keys
 	}
 
