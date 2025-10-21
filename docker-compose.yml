@@ -1,0 +1,75 @@
+# KyxApiQuotaBridge Docker Compose Configuration
+#
+# Quick Start:
+#   1. cp .env.example .env and configure required variables
+#   2. docker-compose up -d
+#   3. Access at http://localhost:2003
+
+version: '3.4'
+
+services:
+  app:
+    image: ghcr.io/james-6-23/kyx-quota-bridge:latest
+    container_name: kyx-quota-bridge
+    restart: always
+    ports:
+      - "2003:8080"
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+    environment:
+      - SERVER_PORT=8080
+      - SERVER_MODE=release
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=kyx200328
+      - DB_NAME=kyxquota
+      - DB_SSLMODE=disable
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=kyx200328
+      - REDIS_DB=0
+      - LINUX_DO_CLIENT_ID=${LINUX_DO_CLIENT_ID:?请设置LinuxDo客户端ID}
+      - LINUX_DO_CLIENT_SECRET=${LINUX_DO_CLIENT_SECRET:?请设置LinuxDo客户端密钥}
+      - LINUX_DO_REDIRECT_URI=${LINUX_DO_REDIRECT_URI:?请设置OAuth回调地址}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:?请设置管理员密码}
+      - JWT_SECRET=${JWT_SECRET:?请设置JWT密钥}
+      - LOG_LEVEL=info
+      - TZ=Asia/Shanghai
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://localhost:8080/health | grep -o '\"status\"' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: kyx-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: kyx200328
+      POSTGRES_DB: kyxquota
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d:ro
+#    ports:
+#      - "5432:5432"  # Uncomment if you need to access PostgreSQL from outside Docker
+
+  redis:
+    image: redis:7-alpine
+    container_name: kyx-redis
+    restart: always
+    command: redis-server --requirepass kyx200328 --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+#    ports:
+#      - "6379:6379"  # Uncomment if you need to access Redis from outside Docker
+
+volumes:
+  pg_data:
+  redis_data:
