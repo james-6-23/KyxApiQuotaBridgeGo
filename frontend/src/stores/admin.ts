@@ -8,17 +8,14 @@ import { ref, computed } from 'vue'
 import { message } from 'ant-design-vue'
 import {
   getAdminConfig,
-  updateAdminConfig,
+  updateConfig as updateAdminConfigAPI,
   getSystemStats,
   getAllUsers,
   getAllClaimRecords,
   getAllDonateRecords,
-  getAllKeys,
   deleteUser,
-  deleteClaimRecord,
-  deleteDonateRecord,
-  validateKeys,
-  pushKeysToKyx
+  testKeys as validateKeysAPI,
+  pushKeys as pushKeysAPI
 } from '@/api/admin'
 import type {
   AdminConfig,
@@ -140,7 +137,7 @@ export const useAdminStore = defineStore('admin', () => {
     try {
       configLoading.value = true
 
-      const { data } = await updateAdminConfig(form)
+      const { data } = await updateAdminConfigAPI(form)
 
       if (data.success) {
         message.success(data.message || '配置更新成功')
@@ -424,7 +421,7 @@ export const useAdminStore = defineStore('admin', () => {
     try {
       loading.value = true
 
-      const { data } = await validateKeys(keyList)
+      const { data } = await validateKeysAPI(keyList)
 
       if (data.success && data.data) {
         message.success('Keys 验证完成')
@@ -449,7 +446,7 @@ export const useAdminStore = defineStore('admin', () => {
     try {
       loading.value = true
 
-      const { data } = await pushKeysToKyx()
+      const { data } = await pushKeysAPI(selectedKeys.value)
 
       if (data.success) {
         message.success(data.message || '推送成功')

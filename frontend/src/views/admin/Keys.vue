@@ -12,7 +12,7 @@
 
     <!-- 操作栏 -->
     <a-card class="mb-6">
-      <a-row :gutter="16}>
+      <a-row :gutter="16">
         <a-col :xs="24" :sm="12" :md="8" :lg="6">
           <a-input
             v-model:value="searchKeyword"
@@ -62,7 +62,7 @@
 
       <a-divider />
 
-      <a-row :gutter="16}>
+      <a-row :gutter="16">
         <a-col :xs="24" :sm="12" :md="8">
           <a-button
             type="primary"

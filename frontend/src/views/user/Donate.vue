@@ -1006,3 +1006,4 @@ onMounted(async () => {
   background-size: 200% 200%;
   animation: gradientShift 10s ease infinite;
 }
+</style>

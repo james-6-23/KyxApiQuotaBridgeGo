@@ -357,7 +357,7 @@ const handleConfirmBind = async () => {
     binding.value = true
 
     // 调用 Store 绑定方法
-    const success = await userStore.bindAccount({
+    const success = await userStore.bind({
       kyx_username: formState.kyx_username
     })
 

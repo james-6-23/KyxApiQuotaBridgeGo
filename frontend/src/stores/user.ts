@@ -9,7 +9,7 @@ import { message } from 'ant-design-vue'
 import {
   getUserQuota,
   getUserStats,
-  bindKyxAccount,
+  bindAccount,
   claimDailyQuota,
   donateKeys,
   getUserClaimRecords,
@@ -136,11 +136,11 @@ export const useUserStore = defineStore('user', () => {
   /**
    * 绑定 KYX 账号
    */
-  const bindAccount = async (form: BindAccountForm): Promise<boolean> => {
+  const bind = async (form: BindAccountForm): Promise<boolean> => {
     try {
       loading.value = true
 
-      const { data } = await bindKyxAccount(form)
+      const { data } = await bindAccount(form)
 
       if (data.success) {
         message.success(data.message || '绑定成功')
@@ -375,7 +375,7 @@ export const useUserStore = defineStore('user', () => {
     // Actions
     fetchUserQuota,
     fetchUserStats,
-    bindAccount,
+    bind,
     claimQuota,
     donate,
     fetchClaimRecords,
