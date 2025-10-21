@@ -56,7 +56,7 @@ app.config.errorHandler = (err, instance, info) => {
 
 // Warning Handler (Development Only)
 if (import.meta.env.DEV) {
-  app.config.warnHandler = (msg, instance, trace) => {
+  app.config.warnHandler = (msg, _instance, trace) => {
     console.warn('Warning:', msg)
     console.warn('Trace:', trace)
   }

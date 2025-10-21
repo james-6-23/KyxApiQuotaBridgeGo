@@ -14,7 +14,7 @@ import { message } from 'ant-design-vue'
  */
 export function setupRouterGuards(router: Router) {
   // 创建前置守卫
-  router.beforeEach(async (to, from, next) => {
+  router.beforeEach(async (to, _from, next) => {
     // 启动进度条
     NProgress.start()
 
@@ -184,7 +184,6 @@ function generateBreadcrumbs(route: any): Array<{ name: string; path?: string }>
  */
 export function useRouterGuards() {
   const authStore = useAuthStore()
-  const appStore = useAppStore()
 
   /**
    * 检查当前路由是否需要认证

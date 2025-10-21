@@ -614,7 +614,7 @@ const handleValidateSingle = async (key: DonatedKey) => {
 /**
  * 推送单个 Key
  */
-const handlePushSingle = async (key: DonatedKey) => {
+const handlePushSingle = async (_key: DonatedKey) => {
   pushing.value = true
   try {
     // 这里应该调用单个推送的 API，暂时使用批量推送
@@ -643,7 +643,7 @@ const showDetail = (key: DonatedKey) => {
 /**
  * 删除 Key
  */
-const handleDelete = async (key: DonatedKey) => {
+const handleDelete = async (_key: DonatedKey) => {
   try {
     // TODO: 实现删除 API
     message.success('删除成功')

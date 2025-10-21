@@ -30,6 +30,7 @@ export interface UserQuota {
   last_claim_date?: string
   total_donated: number
   total_claimed: number
+  created_at?: string
 }
 
 /**

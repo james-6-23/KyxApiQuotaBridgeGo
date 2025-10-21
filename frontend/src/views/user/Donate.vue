@@ -160,7 +160,7 @@
                 <HeartFilled class="text-2xl text-pink-500" />
               </div>
               <div class="text-3xl font-bold text-purple-600">
-                {{ userStats?.donate_count || 0 }}
+                {{ userStats?.donateCount || 0 }}
               </div>
             </div>
 
@@ -180,7 +180,7 @@
                 <GiftFilled class="text-2xl text-green-500" />
               </div>
               <div class="text-3xl font-bold text-green-600">
-                {{ formatNumber(userStats?.donate_quota || 0) }}
+                {{ formatNumber(userStats?.donateQuota || 0) }}
               </div>
             </div>
 

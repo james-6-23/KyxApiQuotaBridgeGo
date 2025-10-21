@@ -13,7 +13,10 @@ import {
   getAllUsers,
   getAllClaimRecords,
   getAllDonateRecords,
+  getAllKeys,
   deleteUser,
+  deleteClaimRecord,
+  deleteDonateRecord,
   testKeys as validateKeysAPI,
   pushKeys as pushKeysAPI
 } from '@/api/admin'
@@ -38,6 +41,7 @@ export const useAdminStore = defineStore('admin', () => {
   const claimRecords = ref<ClaimRecord[]>([])
   const donateRecords = ref<DonateRecord[]>([])
   const keys = ref<DonatedKey[]>([])
+  const selectedKeys = ref<string[]>([])
   const loading = ref(false)
   const configLoading = ref(false)
   const statsLoading = ref(false)
@@ -442,11 +446,12 @@ export const useAdminStore = defineStore('admin', () => {
   /**
    * 推送 Keys 到 KYX
    */
-  const pushKeys = async (): Promise<boolean> => {
+  const pushKeys = async (keysToPush?: string[]): Promise<boolean> => {
     try {
       loading.value = true
 
-      const { data } = await pushKeysAPI(selectedKeys.value)
+      const keys = keysToPush || selectedKeys.value
+      const { data } = await pushKeysAPI(keys)
 
       if (data.success) {
         message.success(data.message || '推送成功')
@@ -556,6 +561,7 @@ export const useAdminStore = defineStore('admin', () => {
     claimRecords,
     donateRecords,
     keys,
+    selectedKeys,
     loading,
     configLoading,
     statsLoading,

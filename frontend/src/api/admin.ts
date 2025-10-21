@@ -12,7 +12,8 @@ import type {
   DonateRecord,
   DonatedKey,
   SystemStats,
-  ApiResponse
+  PaginationParams,
+  PaginatedResponse
 } from '@/types'
 
 // ==================== 配置管理 ====================
@@ -120,6 +121,15 @@ export const exportKeys = () => {
 }
 
 /**
+ * 获取所有 Keys（分页）
+ * @param params - 分页参数
+ * @returns 所有已投喂的 Keys 列表（分页）
+ */
+export const getAllKeys = (params?: PaginationParams) => {
+  return request.get<PaginatedResponse<DonatedKey>>('/admin/keys', { params })
+}
+
+/**
  * 删除指定的 Keys
  * @param keys - 要删除的 Keys 数组
  * @returns 删除结果
@@ -137,7 +147,12 @@ export const deleteKeys = (keys: string[]) => {
  * @returns 测试结果
  */
 export const testKeys = (keys: string[]) => {
-  return request.post<Array<{ key: string; valid: boolean; message?: string }>>('/admin/keys/test', { keys })
+  return request.post<{
+    total: number
+    valid: number
+    invalid: number
+    validations: Array<{ key: string; valid: boolean; message?: string }>
+  }>('/admin/keys/test', { keys })
 }
 
 /**
@@ -170,18 +185,44 @@ export const getKeysStats = () => {
 
 /**
  * 获取所有领取记录
+ * @param params - 分页参数
  * @returns 所有用户的领取记录列表
  */
-export const getAllClaimRecords = () => {
-  return request.get<ClaimRecord[]>('/admin/records/claim')
+export const getAllClaimRecords = (params?: PaginationParams) => {
+  return request.get<PaginatedResponse<ClaimRecord>>('/admin/records/claim', { params })
 }
 
 /**
  * 获取所有投喂记录
+ * @param params - 分页参数
  * @returns 所有用户的投喂记录列表
  */
-export const getAllDonateRecords = () => {
-  return request.get<DonateRecord[]>('/admin/records/donate')
+export const getAllDonateRecords = (params?: PaginationParams) => {
+  return request.get<PaginatedResponse<DonateRecord>>('/admin/records/donate', { params })
+}
+
+/**
+ * 删除领取记录
+ * @param id - 领取记录 ID
+ * @returns 删除结果
+ */
+export const deleteClaimRecord = (id: number) => {
+  return request.delete(`/admin/records/claim/${id}`, {
+    showSuccessMsg: true,
+    successMsg: '领取记录已删除'
+  })
+}
+
+/**
+ * 删除投喂记录
+ * @param id - 投喂记录 ID
+ * @returns 删除结果
+ */
+export const deleteDonateRecord = (id: number) => {
+  return request.delete(`/admin/records/donate/${id}`, {
+    showSuccessMsg: true,
+    successMsg: '投喂记录已删除'
+  })
 }
 
 /**
@@ -225,10 +266,11 @@ export const getDonateRecordsByDateRange = (start_date: string, end_date: string
 
 /**
  * 获取所有用户列表
+ * @param params - 分页参数
  * @returns 所有用户的统计信息列表
  */
-export const getAllUsers = () => {
-  return request.get<UserStats[]>('/admin/users')
+export const getAllUsers = (params?: PaginationParams) => {
+  return request.get<PaginatedResponse<UserStats>>('/admin/users', { params })
 }
 
 /**

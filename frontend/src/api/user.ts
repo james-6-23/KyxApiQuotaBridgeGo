@@ -6,11 +6,13 @@
 import { request } from './request'
 import type {
   UserQuota,
+  UserStats,
   BindAccountForm,
   ClaimRecord,
   DonateRecord,
   DonateForm,
-  ApiResponse
+  PaginationParams,
+  PaginatedResponse
 } from '@/types'
 
 /**
@@ -63,18 +65,20 @@ export const donateKeys = (data: DonateForm) => {
 
 /**
  * 获取用户的领取记录
+ * @param params - 分页参数
  * @returns 用户的所有领取记录列表
  */
-export const getUserClaimRecords = () => {
-  return request.get<ClaimRecord[]>('/user/claims')
+export const getUserClaimRecords = (params?: PaginationParams) => {
+  return request.get<PaginatedResponse<ClaimRecord>>('/user/claims', { params })
 }
 
 /**
  * 获取用户的投喂记录
+ * @param params - 分页参数
  * @returns 用户的所有投喂记录列表
  */
-export const getUserDonateRecords = () => {
-  return request.get<DonateRecord[]>('/user/donates')
+export const getUserDonateRecords = (params?: PaginationParams) => {
+  return request.get<PaginatedResponse<DonateRecord>>('/user/donates', { params })
 }
 
 /**
@@ -104,13 +108,7 @@ export const validateKeys = (keys: string[]) => {
  * @returns 用户的统计数据（总领取、总投喂等）
  */
 export const getUserStats = () => {
-  return request.get<{
-    total_claims: number
-    total_claim_quota: number
-    total_donates: number
-    total_donate_quota: number
-    total_quota: number
-  }>('/user/stats')
+  return request.get<UserStats>('/user/stats')
 }
 
 /**

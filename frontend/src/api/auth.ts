@@ -4,7 +4,7 @@
  */
 
 import { request } from './request'
-import type { OAuthUrl, User, LoginForm, ApiResponse } from '@/types'
+import type { OAuthUrl, User, LoginForm } from '@/types'
 
 /**
  * 获取 OAuth 登录 URL

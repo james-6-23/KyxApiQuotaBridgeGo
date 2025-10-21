@@ -498,7 +498,7 @@ const toggleAdmin = async (user: User) => {
 /**
  * 删除用户
  */
-const handleDelete = async (id: number) => {
+const handleDelete = async (_id: number) => {
   try {
     // TODO: 调用删除 API
     message.success('删除成功')

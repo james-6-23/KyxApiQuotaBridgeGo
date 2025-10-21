@@ -355,7 +355,6 @@ import {
 } from '@ant-design/icons-vue'
 import { useAdminStore } from '@/stores/admin'
 import { useAppStore } from '@/stores/app'
-import type { ClaimRecord, DonateRecord } from '@/types'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import relativeTime from 'dayjs/plugin/relativeTime'

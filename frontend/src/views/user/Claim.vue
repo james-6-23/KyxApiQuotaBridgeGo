@@ -93,7 +93,7 @@
               <div class="flex items-center justify-between mb-2">
                 <span class="text-gray-600">累计领取次数</span>
                 <span class="text-2xl font-bold text-blue-600">
-                  {{ userStats?.claim_count || 0 }}
+                  {{ userStats?.claimCount || 0 }}
                 </span>
               </div>
               <a-progress
@@ -107,7 +107,7 @@
               <div class="flex items-center justify-between mb-2">
                 <span class="text-gray-600">累计领取额度</span>
                 <span class="text-2xl font-bold text-green-600">
-                  {{ formatNumber(userStats?.claim_quota || 0) }}
+                  {{ formatNumber(userStats?.claimQuota || 0) }}
                 </span>
               </div>
               <a-progress
@@ -238,7 +238,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, reactive } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
 import type { TableColumnsType, TableProps } from 'ant-design-vue'
@@ -254,7 +254,6 @@ import {
 } from '@ant-design/icons-vue'
 import { useUserStore } from '@/stores/user'
 import { useAppStore } from '@/stores/app'
-import type { ClaimRecord } from '@/types'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -364,7 +363,7 @@ const formatRelativeTime = (date: string): string => {
  * 获取领取进度百分比
  */
 const getClaimProgress = (): number => {
-  const count = userStats.value?.claim_count || 0
+  const count = userStats.value?.claimCount || 0
   return Math.min((count / 30) * 100, 100)
 }
 
@@ -372,7 +371,7 @@ const getClaimProgress = (): number => {
  * 获取额度进度百分比
  */
 const getQuotaProgress = (): number => {
-  const quota = userStats.value?.claim_quota || 0
+  const quota = userStats.value?.claimQuota || 0
   return Math.min((quota / 10000) * 100, 100)
 }
 

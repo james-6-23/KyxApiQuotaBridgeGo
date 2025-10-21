@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { ConfigProvider } from 'ant-design-vue'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import dayjs from 'dayjs'
@@ -10,7 +10,6 @@ import 'dayjs/locale/zh-cn'
 dayjs.locale('zh-cn')
 
 const router = useRouter()
-const route = useRoute()
 
 // Ant Design Vue 主题配置
 const theme = computed(() => ({
@@ -29,7 +28,7 @@ const theme = computed(() => ({
 }))
 
 // 监听路由变化
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   // 设置页面标题
   const title = to.meta.title as string
   if (title) {

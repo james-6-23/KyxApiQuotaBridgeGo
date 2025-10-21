@@ -291,7 +291,6 @@ import {
 import { useAuthStore } from '@/stores/auth'
 import { useUserStore } from '@/stores/user'
 import { useAppStore } from '@/stores/app'
-import type { ClaimRecord, DonateRecord } from '@/types'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import relativeTime from 'dayjs/plugin/relativeTime'

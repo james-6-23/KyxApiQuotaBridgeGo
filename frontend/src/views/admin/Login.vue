@@ -196,7 +196,8 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { message } from 'ant-design-vue'
-import type { FormInstance, Rule } from 'ant-design-vue'
+import type { FormInstance } from 'ant-design-vue'
+import type { Rule } from 'ant-design-vue/es/form'
 import {
   CrownOutlined,
   LockOutlined,
