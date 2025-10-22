@@ -64,6 +64,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   /**
    * 检查用户登录状态
+   * 通过调用后端API验证Cookie中的session
    */
   const checkAuthStatus = async (): Promise<boolean> => {
     // 如果已经有用户信息，直接返回
@@ -71,29 +72,25 @@ export const useAuthStore = defineStore('auth', () => {
       return true
     }
 
-    // 尝试从 localStorage 恢复
-    const savedToken = localStorage.getItem('token')
-    const savedUser = localStorage.getItem('user')
-
-    if (!savedToken || !savedUser) {
-      return false
-    }
-
     try {
       loading.value = true
 
-      // 验证 token 是否有效
+      // 调用后端API验证Cookie中的session
       const { data } = await checkAuth()
 
-      if (data.success && data.data) {
-        user.value = data.data
-        token.value = savedToken
-        return true
-      } else {
-        // Token 无效，清除本地数据
-        clearAuth()
-        return false
+      if (data.success && data.data && data.data.authenticated) {
+        // 登录有效，保存用户信息
+        if (data.data.user) {
+          user.value = data.data.user
+          // 设置一个假的token标记(因为实际token在HttpOnly Cookie中)
+          token.value = 'session-cookie'
+          return true
+        }
       }
+
+      // Session无效或已过期
+      clearAuth()
+      return false
     } catch (error) {
       console.error('Check auth status failed:', error)
       clearAuth()
@@ -113,7 +110,10 @@ export const useAuthStore = defineStore('auth', () => {
       const { data } = await handleOAuthCallback(code, state)
 
       if (data.success && data.data) {
-        setUser(data.data)
+        // 设置用户信息
+        setUser(data.data.user || data.data)
+        // 设置token标记(实际token在HttpOnly Cookie中)
+        setToken('session-cookie')
         setAdminStatus(false)
         message.success('登录成功')
         return true
