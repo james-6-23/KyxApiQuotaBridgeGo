@@ -120,7 +120,7 @@ KyxApiQuotaBridgeGo/
 
 ```bash
 # 1. 克隆项目
-git clone https://github.com/yourusername/KyxApiQuotaBridgeGo.git
+git clone https://github.com/james-6-23/KyxApiQuotaBridgeGo.git
 cd KyxApiQuotaBridgeGo
 
 # 2. 运行一键部署脚本
