@@ -120,13 +120,9 @@ func (h *AuthHandler) HandleCallback(c *gin.Context) {
 		"username":    user.Username,
 	}).Info("User authenticated via OAuth")
 
-	c.JSON(http.StatusOK, model.NewResponse(
-		gin.H{
-			"user":       user,
-			"session_id": sessionID,
-		},
-		"Authentication successful",
-	))
+	// 重定向到前端回调页面,由前端处理后续跳转
+	// 前端会检查 cookie 中的 session_id 来确认登录状态
+	c.Redirect(http.StatusFound, "/user/dashboard")
 }
 
 // Logout 用户登出
