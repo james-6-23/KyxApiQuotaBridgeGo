@@ -109,7 +109,7 @@ func (s *UserService) BindAccount(ctx context.Context, linuxDoID, username strin
 		}
 
 		// 获取最新的额度信息
-		kyxUser, err := s.kyxClient.GetUserByID(ctx, user.KyxUserID)
+		_, err := s.kyxClient.GetUserByID(ctx, user.KyxUserID)
 		if err != nil {
 			s.logger.WithError(err).Warn("Failed to get Kyx user info for bound account")
 			// 即使获取失败，也返回已绑定的用户信息

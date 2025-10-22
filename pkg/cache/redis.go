@@ -187,6 +187,15 @@ func (r *Redis) Decr(ctx context.Context, key string) (int64, error) {
 	return val, nil
 }
 
+// DecrBy 递减指定值
+func (r *Redis) DecrBy(ctx context.Context, key string, value int64) (int64, error) {
+	val, err := r.client.DecrBy(ctx, key, value).Result()
+	if err != nil {
+		return 0, fmt.Errorf("failed to decrement key %s by %d: %w", key, value, err)
+	}
+	return val, nil
+}
+
 // SAdd 添加成员到集合
 func (r *Redis) SAdd(ctx context.Context, key string, members ...interface{}) error {
 	if err := r.client.SAdd(ctx, key, members...).Err(); err != nil {
@@ -422,4 +431,31 @@ func (r *Redis) LLen(ctx context.Context, key string) (int64, error) {
 // IsNil 检查错误是否是 redis.Nil
 func IsNil(err error) bool {
 	return err == redis.Nil
+}
+
+// Ping 检查Redis连接
+func (r *Redis) Ping(ctx context.Context) error {
+	if err := r.client.Ping(ctx).Err(); err != nil {
+		return fmt.Errorf("ping failed: %w", err)
+	}
+	return nil
+}
+
+// BloomAdd 向布隆过滤器添加元素（使用Set实现简单版本）
+// 注意：这不是真正的布隆过滤器，如果需要真正的布隆过滤器，请安装RedisBloom模块
+func (r *Redis) BloomAdd(ctx context.Context, key string, member string) error {
+	if err := r.client.SAdd(ctx, key, member).Err(); err != nil {
+		return fmt.Errorf("failed to add to bloom filter %s: %w", key, err)
+	}
+	return nil
+}
+
+// BloomExists 检查元素是否可能存在于布隆过滤器（使用Set实现简单版本）
+// 注意：这不是真正的布隆过滤器，如果需要真正的布隆过滤器，请安装RedisBloom模块
+func (r *Redis) BloomExists(ctx context.Context, key string, member string) (bool, error) {
+	result, err := r.client.SIsMember(ctx, key, member).Result()
+	if err != nil {
+		return false, fmt.Errorf("failed to check bloom filter %s: %w", key, err)
+	}
+	return result, nil
 }

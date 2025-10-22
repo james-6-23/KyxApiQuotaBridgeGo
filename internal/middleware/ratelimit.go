@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"time"
@@ -238,7 +239,7 @@ func (m *RateLimitMiddleware) CustomRateLimit(keyFunc func(*gin.Context) string,
 }
 
 // checkRateLimit 检查限流状态
-func (m *RateLimitMiddleware) checkRateLimit(ctx gin.Context, key string, limit int64, window time.Duration) (allowed bool, remaining int64, err error) {
+func (m *RateLimitMiddleware) checkRateLimit(ctx context.Context, key string, limit int64, window time.Duration) (allowed bool, remaining int64, err error) {
 	allowed, err = m.cacheService.CheckRateLimit(ctx, key, limit, window)
 	if err != nil {
 		return false, 0, err

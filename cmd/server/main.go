@@ -55,7 +55,7 @@ func main() {
 		SSLMode:         cfg.Database.SSLMode,
 		MaxOpenConns:    cfg.Database.MaxOpenConns,
 		MaxIdleConns:    cfg.Database.MaxIdleConns,
-		ConnMaxLifetime: time.Duration(cfg.Database.ConnMaxLifetime) * time.Minute,
+		ConnMaxLifetime: cfg.Database.ConnMaxLifetime,
 	}, logger)
 	if err != nil {
 		logger.WithError(err).Fatal("Failed to connect to database")
