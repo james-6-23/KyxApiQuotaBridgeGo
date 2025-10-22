@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -88,8 +89,20 @@ func (h *AdminHandler) UpdateConfig(c *gin.Context) {
 		return
 	}
 
+	h.logger.WithFields(logrus.Fields{
+		"claim_quota":        req.ClaimQuota,
+		"session_provided":   req.Session != nil && *req.Session != "",
+		"new_api_user":       req.NewAPIUser,
+		"keys_api_url":       req.KeysAPIURL,
+		"keys_auth_provided": req.KeysAuthorization != nil && *req.KeysAuthorization != "",
+		"group_id":           req.GroupID,
+	}).Info("Received config update request")
+
 	if err := h.adminService.UpdateConfig(c.Request.Context(), &req); err != nil {
-		h.logger.WithError(err).Error("Failed to update config")
+		h.logger.WithError(err).WithFields(logrus.Fields{
+			"error_type": fmt.Sprintf("%T", err),
+			"error_msg":  err.Error(),
+		}).Error("Failed to update config")
 		c.JSON(http.StatusInternalServerError, model.NewErrorResponse("failed to update config", err))
 		return
 	}

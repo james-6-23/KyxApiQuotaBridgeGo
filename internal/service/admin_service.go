@@ -140,7 +140,14 @@ func (s *AdminService) UpdateConfig(ctx context.Context, req *model.UpdateConfig
 
 		if val, ok := updates["claim_quota"].(int64); ok {
 			newConfig.ClaimQuota = val
+			s.logger.WithField("claim_quota", val).Debug("Setting claim_quota from int64")
+		} else {
+			s.logger.WithFields(logrus.Fields{
+				"value": updates["claim_quota"],
+				"type":  fmt.Sprintf("%T", updates["claim_quota"]),
+			}).Debug("claim_quota type mismatch or not provided")
 		}
+		
 		if val, ok := updates["session"].(string); ok {
 			newConfig.Session = val
 		}
@@ -155,7 +162,18 @@ func (s *AdminService) UpdateConfig(ctx context.Context, req *model.UpdateConfig
 		}
 		if val, ok := updates["group_id"].(int); ok {
 			newConfig.GroupID = val
+			s.logger.WithField("group_id", val).Debug("Setting group_id from int")
+		} else {
+			s.logger.WithFields(logrus.Fields{
+				"value": updates["group_id"],
+				"type":  fmt.Sprintf("%T", updates["group_id"]),
+			}).Debug("group_id type mismatch or not provided")
 		}
+
+		s.logger.WithFields(logrus.Fields{
+			"new_config": newConfig,
+			"updates":    updates,
+		}).Info("Creating new admin config")
 
 		if err := s.adminConfigRepo.Create(ctx, newConfig); err != nil {
 			s.logger.WithError(err).Error("Failed to create admin config")
