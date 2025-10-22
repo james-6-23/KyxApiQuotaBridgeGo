@@ -399,6 +399,8 @@ func setupRouter(
 	// 前端静态文件服务
 	// 1. 提供静态资源（CSS, JS, 图片等）
 	router.Static("/assets", "./web/assets")
+	router.Static("/js", "./web/js")
+	router.Static("/css", "./web/css")
 
 	// 2. 提供 favicon 和其他根目录文件
 	router.StaticFile("/favicon.ico", "./web/favicon.ico")
