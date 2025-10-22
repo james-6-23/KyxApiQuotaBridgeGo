@@ -37,6 +37,10 @@ func (r *AdminConfigRepository) Get(ctx context.Context) (*model.AdminConfig, er
 		r.logger.Debug("Admin config retrieved from cache")
 		return &config, nil
 	}
+	// 缓存未命中或出错，继续从数据库查询
+	if err != nil {
+		r.logger.WithError(err).Debug("Failed to get admin config from cache, falling back to database")
+	}
 
 	// 从数据库获取
 	query := `
