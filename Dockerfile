@@ -12,8 +12,8 @@ WORKDIR /frontend
 # 复制前端依赖文件
 COPY frontend/package*.json ./
 
-# 安装依赖
-RUN npm ci --only=production
+# 安装所有依赖（包括 devDependencies，构建时需要）
+RUN npm ci
 
 # 复制前端源代码
 COPY frontend/ ./
@@ -66,6 +66,11 @@ RUN chmod +x kyx-quota-bridge
 
 # ==================== 阶段 3: 最终运行镜像 ====================
 FROM alpine:3.18
+
+# 构建参数（需要在每个阶段重新声明）
+ARG VERSION=dev
+ARG BUILD_TIME=unknown
+ARG GIT_COMMIT=unknown
 
 # 安装运行时依赖
 RUN apk add --no-cache \
