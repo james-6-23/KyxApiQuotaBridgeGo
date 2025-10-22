@@ -6,6 +6,9 @@
 # ==================== 阶段 1: 前端构建 ====================
 FROM node:18-alpine AS frontend-builder
 
+# 性能优化参数
+ARG SKIP_TYPE_CHECK=false
+
 # 设置工作目录
 WORKDIR /frontend
 
@@ -19,7 +22,15 @@ RUN npm ci
 COPY frontend/ ./
 
 # 构建前端（生成静态文件到 dist 目录）
-RUN npm run build
+# 性能优化：在 CI 环境中可以跳过类型检查以加快构建速度
+# 使用 --build-arg SKIP_TYPE_CHECK=true 来跳过类型检查
+RUN if [ "$SKIP_TYPE_CHECK" = "true" ]; then \
+        echo "Skipping TypeScript type checking for faster build"; \
+        npm run build:skip-types; \
+    else \
+        echo "Running full build with type checking"; \
+        npm run build; \
+    fi
 
 # ==================== 阶段 2: 后端构建 ====================
 FROM golang:1.21-alpine AS backend-builder
