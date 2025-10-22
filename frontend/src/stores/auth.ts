@@ -10,10 +10,9 @@ import { message } from 'ant-design-vue'
 import {
   checkAuth,
   logout as logoutApi,
-  adminLogin as adminLoginApi,
   handleOAuthCallback
 } from '@/api/auth'
-import type { User, LoginForm } from '@/types'
+import type { User } from '@/types'
 
 export const useAuthStore = defineStore('auth', () => {
   const router = useRouter()
