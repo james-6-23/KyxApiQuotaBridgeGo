@@ -110,8 +110,8 @@ export const useAuthStore = defineStore('auth', () => {
       const { data } = await handleOAuthCallback(code, state)
 
       if (data.success && data.data) {
-        // 设置用户信息
-        setUser(data.data.user || data.data)
+        // 设置用户信息 (handleOAuthCallback 直接返回 User 对象)
+        setUser(data.data)
         // 设置token标记(实际token在HttpOnly Cookie中)
         setToken('session-cookie')
         setAdminStatus(false)
@@ -226,8 +226,8 @@ export const useAuthStore = defineStore('auth', () => {
 
       const { data } = await checkAuth()
 
-      if (data.success && data.data) {
-        setUser(data.data)
+      if (data.success && data.data && data.data.authenticated && data.data.user) {
+        setUser(data.data.user)
         return true
       }
 
