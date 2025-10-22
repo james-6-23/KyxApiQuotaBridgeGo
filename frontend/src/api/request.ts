@@ -83,9 +83,17 @@ service.interceptors.request.use(
 
     // 添加认证 Token
     if (!config.skipAuth) {
-      const token = localStorage.getItem('token')
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`
+      // 优先使用管理员 Token（用于管理员 API）
+      const adminToken = localStorage.getItem('adminToken')
+      if (adminToken) {
+        config.headers.Authorization = `Bearer ${adminToken}`
+      } else {
+        // 如果没有管理员 Token，尝试使用普通用户 Token（实际上用户通过 Cookie 认证）
+        const userToken = localStorage.getItem('token')
+        if (userToken && userToken !== 'session-cookie') {
+          config.headers.Authorization = `Bearer ${userToken}`
+        }
+        // 注意：用户认证主要通过 HttpOnly Cookie (withCredentials: true)
       }
     }
 

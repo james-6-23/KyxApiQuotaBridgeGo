@@ -130,48 +130,8 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  /**
-   * 管理员登录
-   */
-  const adminLogin = async (loginForm: LoginForm): Promise<boolean> => {
-    try {
-      loading.value = true
-
-      const { data } = await adminLoginApi(loginForm)
-
-      if (data.success && data.data) {
-        // 设置 Token
-        if (data.data.token) {
-          setToken(data.data.token)
-        }
-
-        // 设置用户信息（如果有）
-        if (data.data.user) {
-          setUser(data.data.user)
-        } else {
-          // 如果没有返回用户信息，创建一个管理员用户对象
-          setUser({
-            username: 'admin',
-            linux_do_id: 'admin',
-            created_at: new Date().toISOString()
-          })
-        }
-
-        setAdminStatus(true)
-        message.success('管理员登录成功')
-        return true
-      } else {
-        message.error(data.message || '登录失败')
-        return false
-      }
-    } catch (error: any) {
-      console.error('Admin login failed:', error)
-      message.error(error.message || '登录失败')
-      return false
-    } finally {
-      loading.value = false
-    }
-  }
+  // 管理员登录已移至 adminAuth store
+  // 请使用 useAdminAuthStore 进行管理员认证
 
   /**
    * 登出
@@ -287,7 +247,6 @@ export const useAuthStore = defineStore('auth', () => {
     setAdminStatus,
     checkAuthStatus,
     handleOAuthLogin,
-    adminLogin,
     logout,
     clearAuth,
     refreshUserInfo,

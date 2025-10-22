@@ -6,6 +6,7 @@
 export { useAuthStore } from './auth'
 export { useUserStore } from './user'
 export { useAdminStore } from './admin'
+export { useAdminAuthStore } from './adminAuth'
 export { useAppStore } from './app'
 
 // 类型导出

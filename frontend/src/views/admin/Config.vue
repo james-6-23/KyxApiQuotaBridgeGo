@@ -59,7 +59,7 @@
             >
               <a-input-password
                 v-model:value="formState.session"
-                placeholder="请输入 Session 密钥"
+                :placeholder="isSessionConfigured ? '已配置，留空则不修改' : '请输入 Session 密钥'"
                 :disabled="saving"
               >
                 <template #prefix>
@@ -71,7 +71,7 @@
                   <CheckCircleOutlined v-if="isSessionConfigured" class="text-green-500" />
                   <CloseCircleOutlined v-else class="text-red-500" />
                   <span class="text-xs" :class="isSessionConfigured ? 'text-green-600' : 'text-red-600'">
-                    {{ isSessionConfigured ? 'Session 已配置' : 'Session 未配置' }}
+                    {{ isSessionConfigured ? 'Session 已配置（留空则不修改）' : 'Session 未配置' }}
                   </span>
                 </div>
               </template>
@@ -120,7 +120,7 @@
             >
               <a-input-password
                 v-model:value="formState.keys_authorization"
-                placeholder="请输入 Authorization Token"
+                :placeholder="isKeysApiConfigured ? '已配置，留空则不修改' : '请输入 Authorization Token'"
                 :disabled="saving"
               >
                 <template #prefix>
@@ -132,7 +132,7 @@
                   <CheckCircleOutlined v-if="isKeysApiConfigured" class="text-green-500" />
                   <CloseCircleOutlined v-else class="text-red-500" />
                   <span class="text-xs" :class="isKeysApiConfigured ? 'text-green-600' : 'text-red-600'">
-                    {{ isKeysApiConfigured ? 'Keys API 已配置' : 'Keys API 未配置' }}
+                    {{ isKeysApiConfigured ? 'Keys API 已配置（留空则不修改）' : 'Keys API 未配置' }}
                   </span>
                 </div>
               </template>
@@ -474,11 +474,11 @@ const handleSubmit = async () => {
     if (success) {
       message.success('配置保存成功！')
 
-      // 清空密码类字段
+      // 清空密码类字段（只清空用户输入的内容，提示下次留空则不修改）
       formState.session = ''
       formState.keys_authorization = ''
 
-      // 重新加载配置
+      // 重新加载配置（更新配置状态）
       await loadConfig()
     }
   } catch (error: any) {

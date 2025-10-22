@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -68,6 +69,14 @@ func (h *UserHandler) BindAccount(c *gin.Context) {
 			"linux_do_id": linuxDoID,
 			"username":    req.Username,
 		}).Error("Failed to bind account")
+		
+		// 判断是否是 Session 未配置错误
+		errorMsg := err.Error()
+		if strings.Contains(errorMsg, "session not configured") {
+			c.JSON(http.StatusInternalServerError, model.NewErrorResponse("请联系管理员配置 Session 密钥后再进行绑定", err))
+			return
+		}
+		
 		c.JSON(http.StatusInternalServerError, model.NewErrorResponse("failed to bind account", err))
 		return
 	}

@@ -208,13 +208,13 @@ import {
   UserOutlined,
   BarChartOutlined
 } from '@ant-design/icons-vue'
-import { useAuthStore } from '@/stores/auth'
+import { useAdminAuthStore } from '@/stores/adminAuth'
 import type { LoginForm } from '@/types'
 
 // ==================== Composables ====================
 const router = useRouter()
 const route = useRoute()
-const authStore = useAuthStore()
+const adminAuthStore = useAdminAuthStore()
 
 // ==================== State ====================
 const formRef = ref<FormInstance>()
@@ -253,8 +253,8 @@ const handleSubmit = async () => {
     loading.value = true
     errorMessage.value = ''
 
-    // 调用登录 API
-    const success = await authStore.adminLogin(formState)
+    // 调用管理员登录 API
+    const success = await adminAuthStore.adminLogin(formState)
 
     if (success) {
       // 如果勾选记住密码，保存到 localStorage
@@ -300,8 +300,8 @@ const showHelpDialog = () => {
  * 检查登录状态
  */
 const checkLoginStatus = async () => {
-  // 如果已经登录且是管理员，重定向到仪表板
-  if (authStore.isAuthenticated && authStore.isAdmin) {
+  // 如果已经登录管理员，重定向到仪表板
+  if (adminAuthStore.isAdminAuthenticated) {
     const redirect = route.query.redirect as string
     if (redirect) {
       router.replace(redirect)
