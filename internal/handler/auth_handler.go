@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -103,16 +104,17 @@ func (h *AuthHandler) HandleCallback(c *gin.Context) {
 		return
 	}
 
-	// 设置Cookie
-	c.SetCookie(
-		"session_id",
-		sessionID,
-		86400*7, // 7天
-		"/",
-		"",
-		false, // 开发环境设为false，生产环境应设为true
-		true,  // HttpOnly
-	)
+	// 设置Cookie (使用 http.Cookie 以支持 SameSite 属性)
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "session_id",
+		Value:    sessionID,
+		Path:     "/",
+		Domain:   "",
+		MaxAge:   86400 * 7, // 7天
+		Secure:   true,      // HTTPS 环境必须为 true
+		HttpOnly: true,      // 防止 XSS 攻击
+		SameSite: http.SameSiteLaxMode, // 防止 CSRF 攻击
+	})
 
 	h.logger.WithFields(logrus.Fields{
 		"user_id":     user.ID,
@@ -157,15 +159,16 @@ func (h *AuthHandler) Logout(c *gin.Context) {
 	}
 
 	// 清除Cookie
-	c.SetCookie(
-		"session_id",
-		"",
-		-1,
-		"/",
-		"",
-		false,
-		true,
-	)
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "session_id",
+		Value:    "",
+		Path:     "/",
+		Domain:   "",
+		MaxAge:   -1,
+		Secure:   true,
+		HttpOnly: true,
+		SameSite: http.SameSiteLaxMode,
+	})
 
 	h.logger.WithField("session_id", sessionID).Info("User logged out")
 
