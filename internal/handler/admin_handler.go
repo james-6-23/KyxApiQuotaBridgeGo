@@ -50,8 +50,17 @@ func NewAdminHandler(
 func (h *AdminHandler) GetConfig(c *gin.Context) {
 	config, err := h.adminService.GetConfig(c.Request.Context())
 	if err != nil {
-		h.logger.WithError(err).Error("Failed to get admin config")
-		c.JSON(http.StatusInternalServerError, model.NewErrorResponse("failed to get config", err))
+		h.logger.WithError(err).Warn("Failed to get admin config, returning default config")
+		// 返回默认配置，避免 500 错误阻塞前端
+		defaultConfig := &model.AdminConfigResponse{
+			ClaimQuota:                  500000,
+			SessionConfigured:           false,
+			KeysAPIURL:                  "",
+			KeysAuthorizationConfigured: false,
+			GroupID:                     1,
+			UpdatedAt:                   0,
+		}
+		c.JSON(http.StatusOK, model.NewResponse(defaultConfig, "Config retrieved (default)"))
 		return
 	}
 
