@@ -189,7 +189,7 @@ export const getKeysStats = () => {
  * @returns 所有用户的领取记录列表
  */
 export const getAllClaimRecords = (params?: PaginationParams) => {
-  return request.get<PaginatedResponse<ClaimRecord>>('/admin/records/claim', { params })
+  return request.get<PaginatedResponse<ClaimRecord>>('/admin/claims', { params })
 }
 
 /**
@@ -198,7 +198,7 @@ export const getAllClaimRecords = (params?: PaginationParams) => {
  * @returns 所有用户的投喂记录列表
  */
 export const getAllDonateRecords = (params?: PaginationParams) => {
-  return request.get<PaginatedResponse<DonateRecord>>('/admin/records/donate', { params })
+  return request.get<PaginatedResponse<DonateRecord>>('/admin/donates', { params })
 }
 
 /**
@@ -207,7 +207,7 @@ export const getAllDonateRecords = (params?: PaginationParams) => {
  * @returns 删除结果
  */
 export const deleteClaimRecord = (id: number) => {
-  return request.delete(`/admin/records/claim/${id}`, {
+  return request.delete(`/admin/claims/${id}`, {
     showSuccessMsg: true,
     successMsg: '领取记录已删除'
   })
@@ -219,7 +219,7 @@ export const deleteClaimRecord = (id: number) => {
  * @returns 删除结果
  */
 export const deleteDonateRecord = (id: number) => {
-  return request.delete(`/admin/records/donate/${id}`, {
+  return request.delete(`/admin/donates/${id}`, {
     showSuccessMsg: true,
     successMsg: '投喂记录已删除'
   })
@@ -245,7 +245,7 @@ export const retryPushKeys = (linux_do_id: string, timestamp: number) => {
  * @returns 时间范围内的领取记录
  */
 export const getClaimRecordsByDateRange = (start_date: string, end_date: string) => {
-  return request.get<ClaimRecord[]>('/admin/records/claim/range', {
+  return request.get<ClaimRecord[]>('/admin/claims/range', {
     params: { start_date, end_date }
   })
 }
@@ -257,7 +257,7 @@ export const getClaimRecordsByDateRange = (start_date: string, end_date: string)
  * @returns 时间范围内的投喂记录
  */
 export const getDonateRecordsByDateRange = (start_date: string, end_date: string) => {
-  return request.get<DonateRecord[]>('/admin/records/donate/range', {
+  return request.get<DonateRecord[]>('/admin/donates/range', {
     params: { start_date, end_date }
   })
 }
