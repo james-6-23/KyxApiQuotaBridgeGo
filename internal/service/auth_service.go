@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -135,8 +136,11 @@ func (s *AuthService) HandleCallback(ctx context.Context, code string, state str
 		return nil, "", fmt.Errorf("failed to get user info: %w", err)
 	}
 
+	// 将 Linux.do 用户ID转换为字符串
+	linuxDoID := strconv.Itoa(userInfo.ID)
+
 	// 查找或创建用户
-	user, err := s.userRepo.GetByLinuxDoID(ctx, userInfo.ID)
+	user, err := s.userRepo.GetByLinuxDoID(ctx, linuxDoID)
 	if err != nil {
 		s.logger.WithError(err).Error("Failed to get user from database")
 		return nil, "", fmt.Errorf("failed to get user: %w", err)
@@ -145,7 +149,7 @@ func (s *AuthService) HandleCallback(ctx context.Context, code string, state str
 	if user == nil {
 		// 用户不存在，创建新用户
 		user = &model.User{
-			LinuxDoID: userInfo.ID,
+			LinuxDoID: linuxDoID,
 			Username:  userInfo.Username,
 			KyxUserID: 0, // 未绑定
 		}

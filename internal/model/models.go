@@ -227,7 +227,7 @@ type KyxSearchResponse struct {
 
 // LinuxDoUserInfo Linux Do 用户信息
 type LinuxDoUserInfo struct {
-	ID        string `json:"id"`
+	ID        int    `json:"id"`        // Linux.do API 返回的是数字类型
 	Username  string `json:"username"`
 	Name      string `json:"name"`
 	AvatarURL string `json:"avatar_url"`
