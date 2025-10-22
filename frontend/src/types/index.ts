@@ -17,6 +17,14 @@ export interface User {
 }
 
 /**
+ * 认证状态检查响应
+ */
+export interface AuthCheckResponse {
+  authenticated: boolean
+  user?: User
+}
+
+/**
  * 用户额度信息
  */
 export interface UserQuota {

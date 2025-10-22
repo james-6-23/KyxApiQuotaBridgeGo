@@ -4,7 +4,7 @@
  */
 
 import { request } from './request'
-import type { OAuthUrl, User, LoginForm } from '@/types'
+import type { OAuthUrl, User, LoginForm, AuthCheckResponse } from '@/types'
 
 /**
  * 获取 OAuth 登录 URL
@@ -31,10 +31,10 @@ export const handleOAuthCallback = (code: string, state?: string) => {
 
 /**
  * 检查当前登录状态
- * @returns 用户信息（如果已登录）
+ * @returns 认证状态和用户信息
  */
 export const checkAuth = () => {
-  return request.get<User>('/auth/check', {
+  return request.get<AuthCheckResponse>('/auth/check', {
     skipErrorHandler: true
   })
 }
