@@ -1,6 +1,7 @@
 package model
 
 import (
+	"database/sql"
 	"database/sql/driver"
 	"encoding/json"
 	"fmt"
@@ -51,14 +52,14 @@ type UsedKey struct {
 
 // AdminConfig 管理员配置模型
 type AdminConfig struct {
-	ID                int       `json:"id" db:"id"`
-	Session           string    `json:"session" db:"session"`
-	NewAPIUser        string    `json:"new_api_user" db:"new_api_user"`
-	ClaimQuota        int64     `json:"claim_quota" db:"claim_quota"`
-	KeysAPIURL        string    `json:"keys_api_url" db:"keys_api_url"`
-	KeysAuthorization string    `json:"keys_authorization" db:"keys_authorization"`
-	GroupID           int       `json:"group_id" db:"group_id"`
-	UpdatedAt         time.Time `json:"updated_at" db:"updated_at"`
+	ID                int            `json:"id" db:"id"`
+	Session           sql.NullString `json:"session" db:"session"`
+	NewAPIUser        sql.NullString `json:"new_api_user" db:"new_api_user"`
+	ClaimQuota        int64          `json:"claim_quota" db:"claim_quota"`
+	KeysAPIURL        sql.NullString `json:"keys_api_url" db:"keys_api_url"`
+	KeysAuthorization sql.NullString `json:"keys_authorization" db:"keys_authorization"`
+	GroupID           int            `json:"group_id" db:"group_id"`
+	UpdatedAt         time.Time      `json:"updated_at" db:"updated_at"`
 }
 
 // Session 会话模型

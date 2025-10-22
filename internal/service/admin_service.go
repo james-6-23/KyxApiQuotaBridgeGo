@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"time"
 
@@ -70,9 +71,9 @@ func (s *AdminService) GetConfig(ctx context.Context) (*model.AdminConfigRespons
 
 	response := &model.AdminConfigResponse{
 		ClaimQuota:                  config.ClaimQuota,
-		SessionConfigured:           config.Session != "",
-		KeysAPIURL:                  config.KeysAPIURL,
-		KeysAuthorizationConfigured: config.KeysAuthorization != "",
+		SessionConfigured:           config.Session.Valid && config.Session.String != "",
+		KeysAPIURL:                  config.KeysAPIURL.String,
+		KeysAuthorizationConfigured: config.KeysAuthorization.Valid && config.KeysAuthorization.String != "",
 		GroupID:                     config.GroupID,
 		UpdatedAt:                   config.UpdatedAt.Unix(),
 	}
@@ -149,16 +150,16 @@ func (s *AdminService) UpdateConfig(ctx context.Context, req *model.UpdateConfig
 		}
 		
 		if val, ok := updates["session"].(string); ok {
-			newConfig.Session = val
+			newConfig.Session = sql.NullString{String: val, Valid: val != ""}
 		}
 		if val, ok := updates["new_api_user"].(string); ok {
-			newConfig.NewAPIUser = val
+			newConfig.NewAPIUser = sql.NullString{String: val, Valid: val != ""}
 		}
 		if val, ok := updates["keys_api_url"].(string); ok {
-			newConfig.KeysAPIURL = val
+			newConfig.KeysAPIURL = sql.NullString{String: val, Valid: val != ""}
 		}
 		if val, ok := updates["keys_authorization"].(string); ok {
-			newConfig.KeysAuthorization = val
+			newConfig.KeysAuthorization = sql.NullString{String: val, Valid: val != ""}
 		}
 		if val, ok := updates["group_id"].(int); ok {
 			newConfig.GroupID = val

@@ -295,7 +295,10 @@ func (r *AdminConfigRepository) GetSession(ctx context.Context) (string, error) 
 	if config == nil {
 		return "", nil
 	}
-	return config.Session, nil
+	if config.Session.Valid {
+		return config.Session.String, nil
+	}
+	return "", nil
 }
 
 // UpdateSession 更新公益站Session
@@ -314,7 +317,15 @@ func (r *AdminConfigRepository) GetKeysAPIConfig(ctx context.Context) (url strin
 	if config == nil {
 		return "", "", nil
 	}
-	return config.KeysAPIURL, config.KeysAuthorization, nil
+	urlStr := ""
+	if config.KeysAPIURL.Valid {
+		urlStr = config.KeysAPIURL.String
+	}
+	authStr := ""
+	if config.KeysAuthorization.Valid {
+		authStr = config.KeysAuthorization.String
+	}
+	return urlStr, authStr, nil
 }
 
 // UpdateKeysAPIConfig 更新Keys API配置
@@ -350,11 +361,11 @@ func (r *AdminConfigRepository) InitializeDefault(ctx context.Context) error {
 
 	// 创建默认配置
 	defaultConfig := &model.AdminConfig{
-		Session:           "",
-		NewAPIUser:        "",
+		Session:           sql.NullString{String: "", Valid: false},
+		NewAPIUser:        sql.NullString{String: "1", Valid: true},
 		ClaimQuota:        500000, // 默认 $1
-		KeysAPIURL:        "",
-		KeysAuthorization: "",
+		KeysAPIURL:        sql.NullString{String: "", Valid: false},
+		KeysAuthorization: sql.NullString{String: "", Valid: false},
 		GroupID:           1,
 	}
 
