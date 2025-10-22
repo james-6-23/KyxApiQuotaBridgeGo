@@ -108,7 +108,7 @@ export const validateKeys = (keys: string[]) => {
  * @returns 用户的统计数据（总领取、总投喂等）
  */
 export const getUserStats = () => {
-  return request.get<UserStats>('/user/stats')
+  return request.get<UserStats>('/user/statistics')
 }
 
 /**
