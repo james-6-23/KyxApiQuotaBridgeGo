@@ -396,10 +396,38 @@ const rules: Record<string, Rule[]> = {
     { type: 'number', min: 1, max: 10000, message: '额度范围应在 1-10000 之间', trigger: 'blur' }
   ],
   keys_api_url: [
-    { type: 'url', message: '请输入有效的 URL', trigger: 'blur' }
+    {
+      validator: async (_rule: Rule, value: string) => {
+        if (!value || value.trim() === '') {
+          // 允许为空
+          return Promise.resolve()
+        }
+        // 验证 URL 格式
+        try {
+          new URL(value)
+          return Promise.resolve()
+        } catch {
+          return Promise.reject('请输入有效的 URL')
+        }
+      },
+      trigger: 'blur'
+    }
   ],
   group_id: [
-    { type: 'number', min: 1, message: 'Group ID 必须大于 0', trigger: 'blur' }
+    {
+      validator: async (_rule: Rule, value: number) => {
+        if (value === undefined || value === null) {
+          // 允许为空
+          return Promise.resolve()
+        }
+        if (value < 1) {
+          return Promise.reject('Group ID 必须大于 0')
+        }
+        return Promise.resolve()
+      },
+      trigger: 'blur',
+      type: 'number'
+    }
   ]
 }
 
