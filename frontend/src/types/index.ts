@@ -186,7 +186,7 @@ export interface LoginForm {
  * 绑定账号表单
  */
 export interface BindAccountForm {
-  kyx_username: string
+  username: string
 }
 
 /**

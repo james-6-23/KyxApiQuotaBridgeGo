@@ -84,12 +84,12 @@
             >
               <a-form-item
                 label="KYX 用户名"
-                name="kyx_username"
+                name="username"
                 :validate-status="validateStatus"
                 :help="helpMessage"
               >
                 <a-input
-                  v-model:value="formState.kyx_username"
+                  v-model:value="formState.username"
                   size="large"
                   placeholder="请输入您的 KYX 用户名"
                   :disabled="binding"
@@ -203,7 +203,7 @@
             {{ username }}
           </a-descriptions-item>
           <a-descriptions-item label="KYX 用户名">
-            <strong class="text-blue-600">{{ formState.kyx_username }}</strong>
+            <strong class="text-blue-600">{{ formState.username }}</strong>
           </a-descriptions-item>
         </a-descriptions>
         <p class="text-sm text-gray-600">
@@ -248,7 +248,7 @@ const validateStatus = ref<'' | 'success' | 'warning' | 'error' | 'validating'>(
 const helpMessage = ref('')
 
 const formState = reactive<BindAccountForm>({
-  kyx_username: ''
+  username: ''
 })
 
 // ==================== Computed ====================
@@ -260,7 +260,7 @@ const quota = computed(() => userStore.quota)
 
 // ==================== Form Rules ====================
 const rules: Record<string, Rule[]> = {
-  kyx_username: [
+  username: [
     { required: true, message: '请输入 KYX 用户名', trigger: 'blur' },
     {
       min: 2,
@@ -310,7 +310,7 @@ const formatDate = (date: string): string => {
  * 处理输入框失焦
  */
 const handleBlur = () => {
-  const value = formState.kyx_username.trim()
+  const value = formState.username.trim()
   if (value) {
     // 实时验证提示
     if (value.length < 2) {
@@ -341,7 +341,7 @@ const handleSubmit = async () => {
     await formRef.value?.validate()
 
     // 去除首尾空格
-    formState.kyx_username = formState.kyx_username.trim()
+    formState.username = formState.username.trim()
 
     // 显示确认对话框
     confirmVisible.value = true
@@ -359,7 +359,7 @@ const handleConfirmBind = async () => {
 
     // 调用 Store 绑定方法
     const success = await userStore.bind({
-      kyx_username: formState.kyx_username
+      username: formState.username
     })
 
     if (success) {
