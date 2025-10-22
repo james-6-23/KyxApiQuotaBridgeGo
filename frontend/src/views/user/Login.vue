@@ -190,9 +190,9 @@ const handleOAuthLogin = async () => {
     // 获取 OAuth 授权 URL
     const { data } = await getOAuthUrl()
 
-    if (data.success && data.data && data.data.url) {
+    if (data.success && data.data && data.data.auth_url) {
       // 跳转到 OAuth 授权页面
-      window.location.href = data.data.url
+      window.location.href = data.data.auth_url
     } else {
       errorMessage.value = data.message || '获取登录链接失败，请稍后重试'
       message.error(errorMessage.value)

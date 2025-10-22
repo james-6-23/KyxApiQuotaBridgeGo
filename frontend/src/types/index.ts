@@ -156,7 +156,8 @@ export interface PaginatedResponse<T> {
  * OAuth 相关
  */
 export interface OAuthUrl {
-  url: string
+  auth_url: string
+  state: string
 }
 
 export interface OAuthCallback {
