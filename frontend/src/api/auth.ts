@@ -56,7 +56,7 @@ export const logout = () => {
  * @returns 包含 Token 的响应
  */
 export const adminLogin = (data: LoginForm) => {
-  return request.post<{ token: string; user?: any }>('/admin/login', data, {
+  return request.post<{ token: string; user?: any }>('/auth/admin/login', data, {
     skipAuth: true,
     showSuccessMsg: true,
     successMsg: '登录成功'

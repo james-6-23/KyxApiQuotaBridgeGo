@@ -16,6 +16,38 @@ NProgress.configure({
   minimum: 0.3
 })
 
+// 消息去重控制
+const messageCache = new Set<string>()
+const MESSAGE_DURATION = 3000 // 消息显示时间
+const MESSAGE_CACHE_DURATION = 5000 // 去重缓存时间
+
+/**
+ * 显示消息（带去重）
+ */
+function showMessage(type: 'success' | 'error' | 'warning' | 'info', content: string) {
+  // 如果消息已在缓存中，不再显示
+  if (messageCache.has(content)) {
+    return
+  }
+
+  // 添加到缓存
+  messageCache.add(content)
+
+  // 显示消息
+  message[type](content, MESSAGE_DURATION / 1000)
+
+  // 清除缓存
+  setTimeout(() => {
+    messageCache.delete(content)
+  }, MESSAGE_CACHE_DURATION)
+}
+
+// 配置 Ant Design Vue message 最大显示数量
+message.config({
+  maxCount: 3, // 最多同时显示3个消息
+  duration: MESSAGE_DURATION / 1000
+})
+
 /**
  * 请求配置接口
  */
@@ -93,7 +125,7 @@ service.interceptors.response.use(
     if (res.success) {
       // 显示成功消息
       if (config.showSuccessMsg) {
-        message.success(config.successMsg || res.message || '操作成功')
+        showMessage('success', config.successMsg || res.message || '操作成功')
       }
       return response
     }
@@ -120,10 +152,10 @@ service.interceptors.response.use(
       handleHttpError(error.response)
     } else if (error.request) {
       // 请求已发出但没有收到响应
-      message.error('网络连接失败，请检查您的网络')
+      showMessage('error', '网络连接失败，请检查您的网络')
     } else {
       // 请求配置出错
-      message.error(error.message || '请求配置错误')
+      showMessage('error', error.message || '请求配置错误')
     }
 
     return Promise.reject(error)
@@ -138,7 +170,7 @@ function handleApiError(res: ApiResponse) {
 
   // 根据错误类型显示不同的消息
   if (errorMsg.includes('未登录') || errorMsg.includes('登录')) {
-    message.warning('请先登录')
+    showMessage('warning', '请先登录')
     // 清除本地存储
     localStorage.removeItem('token')
     localStorage.removeItem('user')
@@ -147,11 +179,11 @@ function handleApiError(res: ApiResponse) {
       window.location.href = '/login'
     }, 1500)
   } else if (errorMsg.includes('权限') || errorMsg.includes('无权')) {
-    message.error('您没有权限执行此操作')
+    showMessage('error', '您没有权限执行此操作')
   } else if (errorMsg.includes('已存在')) {
-    message.warning(errorMsg)
+    showMessage('warning', errorMsg)
   } else {
-    message.error(errorMsg)
+    showMessage('error', errorMsg)
   }
 }
 
@@ -164,10 +196,10 @@ function handleHttpError(response: AxiosResponse<ApiResponse>) {
 
   switch (status) {
     case 400:
-      message.error(data?.message || '请求参数错误')
+      showMessage('error', data?.message || '请求参数错误')
       break
     case 401:
-      message.warning('登录已过期，请重新登录')
+      showMessage('warning', '登录已过期，请重新登录')
       localStorage.removeItem('token')
       localStorage.removeItem('user')
       setTimeout(() => {
@@ -175,31 +207,31 @@ function handleHttpError(response: AxiosResponse<ApiResponse>) {
       }, 1500)
       break
     case 403:
-      message.error('您没有权限访问此资源')
+      showMessage('error', '您没有权限访问此资源')
       break
     case 404:
-      message.error('请求的资源不存在')
+      showMessage('error', '请求的资源不存在')
       break
     case 408:
-      message.error('请求超时')
+      showMessage('error', '请求超时')
       break
     case 429:
-      message.warning('请求过于频繁，请稍后再试')
+      showMessage('warning', '请求过于频繁，请稍后再试')
       break
     case 500:
-      message.error('服务器内部错误')
+      showMessage('error', '服务器内部错误')
       break
     case 502:
-      message.error('网关错误')
+      showMessage('error', '网关错误')
       break
     case 503:
-      message.error('服务暂时不可用')
+      showMessage('error', '服务暂时不可用')
       break
     case 504:
-      message.error('网关超时')
+      showMessage('error', '网关超时')
       break
     default:
-      message.error(data?.message || `请求失败 (${status})`)
+      showMessage('error', data?.message || `请求失败 (${status})`)
   }
 }
 
@@ -268,9 +300,9 @@ class Request {
       link.download = filename
       link.click()
       window.URL.revokeObjectURL(link.href)
-      message.success('下载成功')
+      showMessage('success', '下载成功')
     }).catch(error => {
-      message.error('下载失败')
+      showMessage('error', '下载失败')
       throw error
     })
   }
